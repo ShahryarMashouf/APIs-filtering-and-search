@@ -1,11 +1,12 @@
 from rest_framework import generics
 from .models import MenuItem, Category
 from .serializers import MenuItemSerializer, CategorySerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.response import Response
 
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.throttling import AnonRateThrottle , UserRateThrottle
+from .throttles import TenCallsPerMinute
 
 class CategoriesView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -30,3 +31,14 @@ def manager_view(request):
         return Response({"message":"Only manager will see this"})
     else:
         return Response({"message": "You are not authorized!"})
+    
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_ckeck(request):
+    return Response({"message":"successfull"})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([TenCallsPerMinute])
+def throttle_ckeck_auth(request):
+    return Response({"message":"message for the logged in users only"})

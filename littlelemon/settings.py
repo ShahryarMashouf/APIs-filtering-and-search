@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'menuAPI',
     'rest_framework.authtoken',
+    'djoser',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +129,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES':[
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.OrderingFilter',
         'rest_framework.filters.SearchFilter',
@@ -134,6 +142,18 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 3,
     
     'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
+#     'DEFAULT_THROTTLE_RATES': {
+#         'anon': '20/day',
+#         'user': '5/minute',
+#         'ten': '10/minute',
+#     }
 }
+
+DJOSER = {
+    "USER_ID_FIELD": "username",   
+}
+

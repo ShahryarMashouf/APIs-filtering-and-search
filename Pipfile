@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 django = "*"
+djoser = "*"
+djangorestframework-simplejwt = "~=5.2.1"
 
 [dev-packages]
 
